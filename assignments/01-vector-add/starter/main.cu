@@ -8,12 +8,9 @@
 __global__ void vector_add_kernel(const float* a, const float* b, float* c, int n) {
     int i = blockIdx.x * blockDim.x + threadIdx.x;
 
-    // TODO: If i is in bounds, write c[i] = a[i] + b[i].
-    (void)a;
-    (void)b;
-    (void)c;
-    (void)n;
-    (void)i;
+    if(i<n) {
+        c[i] = a[i] + b[i];
+    }
 }
 
 int main(int argc, char** argv) {
