@@ -111,6 +111,13 @@ int main(int argc, char** argv) {
     dim3 block(BLOCK, BLOCK);
     dim3 grid(div_up(width, BLOCK), div_up(height, BLOCK));
 
+    conv2d_basic_kernel<<<grid, block>>>(d_input, d_mask, d_output, width, height, radius);
+    CUDA_CHECK(cudaGetLastError());
+    conv2d_constant_kernel<<<grid, block>>>(d_input, d_output, width, height, radius);
+    CUDA_CHECK(cudaGetLastError());
+    CUDA_CHECK(cudaDeviceSynchronize());
+    CUDA_CHECK(cudaMemset(d_output, 0, image_bytes));
+
     GpuTimer timer;
     timer.tic();
     conv2d_basic_kernel<<<grid, block>>>(d_input, d_mask, d_output, width, height, radius);
@@ -142,4 +149,3 @@ int main(int argc, char** argv) {
     CUDA_CHECK(cudaFree(d_output));
     return (basic_ok && const_ok) ? 0 : 1;
 }
-

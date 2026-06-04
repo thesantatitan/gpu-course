@@ -21,7 +21,7 @@ Keep the CPU reference and checks unchanged until both kernels pass.
 ## Run
 
 ```bash
-python3 common/compile_and_run.py assignments/02-grids-matmul/starter/main.cu -- 128
+uv run run_modal.py 02 -- 128
 ```
 
 Argument:
@@ -31,8 +31,10 @@ Argument:
 ## Experiments
 
 - Correctness sizes: `31`, `64`, `127`, `128`.
-- Performance sizes: `256`, `512`, `1024` if your runtime can handle them.
+- Performance sizes after both kernels pass: `512`, `1024`, `2048` if your runtime can handle them.
 - Compare basic and tiled kernel time.
+
+The starter runs untimed warmup launches for both kernels before measuring. It uses full CPU-reference checking for `n <= 512` and deterministic sampled checking for larger sizes, so benchmarking `1024` and `2048` does not get dominated by cubic CPU validation.
 
 ## Writeup Prompts
 

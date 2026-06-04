@@ -80,6 +80,13 @@ int main(int argc, char** argv) {
     dim3 block(TILE, TILE);
     dim3 grid(div_up(width, TILE), div_up(height, TILE));
 
+    transpose_naive_kernel<<<grid, block>>>(d_input, d_output, width, height);
+    CUDA_CHECK(cudaGetLastError());
+    transpose_tiled_kernel<<<grid, block>>>(d_input, d_output, width, height);
+    CUDA_CHECK(cudaGetLastError());
+    CUDA_CHECK(cudaDeviceSynchronize());
+    CUDA_CHECK(cudaMemset(d_output, 0, bytes));
+
     GpuTimer timer;
     timer.tic();
     transpose_naive_kernel<<<grid, block>>>(d_input, d_output, width, height);
@@ -112,4 +119,3 @@ int main(int argc, char** argv) {
     CUDA_CHECK(cudaFree(d_output));
     return (naive_ok && tiled_ok) ? 0 : 1;
 }
-

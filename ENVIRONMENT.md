@@ -102,5 +102,6 @@ Apple Silicon and most Macs cannot run CUDA kernels locally. Use the Mac for edi
 - Report GPU model and CUDA version.
 - Separate correctness runs from performance runs.
 - Time kernels with CUDA events, not wall-clock Python timing.
+- Use benchmark numbers only after the starter's untimed warmup launches have run.
 - Include transfer time only when the assignment asks for end-to-end timing.
 - Change one optimization at a time.

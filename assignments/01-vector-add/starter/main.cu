@@ -41,6 +41,11 @@ int main(int argc, char** argv) {
     dim3 block(block_size);
     dim3 grid(div_up(n, block_size));
 
+    vector_add_kernel<<<grid, block>>>(d_a, d_b, d_c, n);
+    CUDA_CHECK(cudaGetLastError());
+    CUDA_CHECK(cudaDeviceSynchronize());
+    CUDA_CHECK(cudaMemset(d_c, 0, bytes));
+
     GpuTimer timer;
     timer.tic();
     vector_add_kernel<<<grid, block>>>(d_a, d_b, d_c, n);
@@ -61,4 +66,3 @@ int main(int argc, char** argv) {
     CUDA_CHECK(cudaFree(d_c));
     return ok ? 0 : 1;
 }
-

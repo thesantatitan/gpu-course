@@ -17,6 +17,7 @@ The starter should include:
 - CPU reference implementation,
 - CUDA allocation/copy/launch boilerplate,
 - correctness comparison,
+- untimed warmup launches before timed kernel measurements,
 - CUDA-event timing,
 - a compact JSON-like result line.
 
@@ -44,4 +45,3 @@ The writeup should answer:
 - Writeup: 10%.
 
 For self-study, use the rubric as a checklist rather than a grade. If correctness fails, performance numbers do not matter yet.
-

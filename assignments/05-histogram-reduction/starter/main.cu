@@ -83,6 +83,15 @@ int main(int argc, char** argv) {
     CUDA_CHECK(cudaMemcpy(d_values, h_values.data(), static_cast<size_t>(n) * sizeof(float),
                           cudaMemcpyHostToDevice));
 
+    CUDA_CHECK(cudaMemset(d_bins, 0, static_cast<size_t>(num_bins) * sizeof(unsigned int)));
+    histogram_atomic_kernel<<<grid_size, block_size>>>(d_data, d_bins, n, num_bins);
+    CUDA_CHECK(cudaGetLastError());
+    CUDA_CHECK(cudaMemset(d_block_sums, 0, static_cast<size_t>(grid_size) * sizeof(float)));
+    reduce_sum_kernel<<<grid_size, block_size, static_cast<size_t>(block_size) * sizeof(float)>>>(
+        d_values, d_block_sums, n);
+    CUDA_CHECK(cudaGetLastError());
+    CUDA_CHECK(cudaDeviceSynchronize());
+
     GpuTimer timer;
     CUDA_CHECK(cudaMemset(d_bins, 0, static_cast<size_t>(num_bins) * sizeof(unsigned int)));
     timer.tic();
@@ -126,4 +135,3 @@ int main(int argc, char** argv) {
     CUDA_CHECK(cudaFree(d_block_sums));
     return (hist_ok && reduce_ok) ? 0 : 1;
 }
-
