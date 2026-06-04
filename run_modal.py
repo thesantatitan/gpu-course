@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -172,14 +173,31 @@ def main() -> int:
     print(f"Program args: {program_args or []}", flush=True)
     print("$ " + " ".join(cmd), flush=True)
 
-    completed = subprocess.run(cmd, cwd=ROOT, env=env, check=False)
+    completed = subprocess.run(
+        cmd,
+        cwd=ROOT,
+        env=env,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+    if completed.stdout:
+        print(completed.stdout, end="")
+
     if completed.returncode != 0:
         print(
-            "\nIf this is your first Modal run, authenticate once with:\n"
+            "\nRun failed. If the output above says Modal is not authenticated, run:\n"
             "  uv run modal setup",
             file=sys.stderr,
         )
-    return completed.returncode
+        return completed.returncode
+
+    match = re.search(r"^Assignment exit code: ([0-9]+)$", completed.stdout or "", re.MULTILINE)
+    if match:
+        return int(match.group(1))
+
+    return 0
 
 
 if __name__ == "__main__":

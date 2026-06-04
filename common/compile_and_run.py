@@ -60,12 +60,14 @@ def main() -> int:
         program_args = program_args[1:]
 
     print("$ " + " ".join(compile_cmd), flush=True)
-    subprocess.run(compile_cmd, check=True, cwd=ROOT)
+    compile_result = subprocess.run(compile_cmd, cwd=ROOT, check=False)
+    if compile_result.returncode != 0:
+        return compile_result.returncode
 
     run_cmd = [str(binary), *program_args]
     print("$ " + " ".join(run_cmd), flush=True)
-    subprocess.run(run_cmd, check=True, cwd=ROOT)
-    return 0
+    run_result = subprocess.run(run_cmd, cwd=ROOT, check=False)
+    return run_result.returncode
 
 
 if __name__ == "__main__":

@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import subprocess
+import sys
 from pathlib import Path
 
 import modal
@@ -120,5 +121,4 @@ def main(source: str = "assignments/01-vector-add/starter/main.cu", program_args
     if result["stderr"]:
         print(result["stderr"], end="", file=sys.stderr)
 
-    if result["returncode"] != 0:
-        raise SystemExit(int(result["returncode"]))
+    print(f"Assignment exit code: {result['returncode']}")
