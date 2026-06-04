@@ -1,13 +1,13 @@
 # Course Progress
 
-Updated: `2026-06-04T17:37:51Z`
+Updated: `2026-06-04T19:22:40Z`
 
-Assignments complete: **1 / 6**
+Assignments complete: **2 / 6**
 
 | ID | Title | Status | Runs | Passed | Latest Args | GPU | Latest Timings (ms) | Best Timings (ms) |
 | --- | --- | --- | ---: | ---: | --- | --- | --- | --- |
 | 01 | Vector Add | done | 1 | 1 | (defaults) | Tesla T4 | gpu_ms=271.309 | gpu_ms=271.309 |
-| 02 | Grids And Matrix Multiply | not done | 1 | 0 | (defaults) | Tesla T4 | basic_ms=31.438, tiled_ms=0.022 | - |
+| 02 | Grids And Matrix Multiply | done | 11 | 2 | (defaults) | Tesla T4 | basic_ms=30.923, tiled_ms=0.034 | basic_ms=30.923, tiled_ms=0.034 |
 | 03 | Memory Performance | not done | 0 | 0 | (defaults) | - | - | - |
 | 04 | Convolution And Stencil | not done | 0 | 0 | (defaults) | - | - | - |
 | 05 | Histogram And Reduction | not done | 0 | 0 | (defaults) | - | - | - |

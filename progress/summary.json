@@ -51,8 +51,23 @@
       "title": "Vector Add"
     },
     "02": {
-      "best_timings_ms": {},
-      "done": false,
+      "best_timings_ms": {
+        "basic_ms": {
+          "gpu": "Tesla T4",
+          "program_args": [],
+          "recorded_at": "2026-06-04T19:22:40Z",
+          "run_id": "1867656e5f83",
+          "value": 30.922752
+        },
+        "tiled_ms": {
+          "gpu": "Tesla T4",
+          "program_args": [],
+          "recorded_at": "2026-06-04T19:22:40Z",
+          "run_id": "1867656e5f83",
+          "value": 0.034336
+        }
+      },
+      "done": true,
       "id": "02",
       "kind": "assignment",
       "latest": {
@@ -63,34 +78,34 @@
           "name": "Tesla T4",
           "raw": "Tesla T4, 580.95.05, 15360 MiB"
         },
-        "assignment_exit_code": 1,
+        "assignment_exit_code": 0,
         "git": {
           "branch": "user/thesantatitan/answers",
-          "commit": "1efc14d",
+          "commit": "e6638a8",
           "dirty": true
         },
         "metrics": {
           "basic_err": 5.7220459e-06,
-          "basic_ms": 31.438463,
+          "basic_ms": 30.922752,
           "lab": "matmul",
           "n": 128,
-          "ok": false,
-          "tiled_err": 21.891191,
-          "tiled_ms": 0.021536
+          "ok": true,
+          "tiled_err": 5.7220459e-06,
+          "tiled_ms": 0.034336
         },
-        "modal_run_url": "https://modal.com/apps/thesantatitan/main/ap-tvluskBR6ERSL4KOe4p4Wr",
-        "passed": false,
+        "modal_run_url": "https://modal.com/apps/thesantatitan/main/ap-WwDmWRzfyRAKbwxSKbWHqe",
+        "passed": true,
         "program_args": [],
-        "recorded_at": "2026-06-04T17:37:51Z",
+        "recorded_at": "2026-06-04T19:22:40Z",
         "requested_gpu": "T4",
-        "run_id": "918092ae3ee1",
+        "run_id": "1867656e5f83",
         "timings_ms": {
-          "basic_ms": 31.438463,
-          "tiled_ms": 0.021536
+          "basic_ms": 30.922752,
+          "tiled_ms": 0.034336
         }
       },
-      "passed_runs": 0,
-      "runs": 1,
+      "passed_runs": 2,
+      "runs": 11,
       "source": "assignments/02-grids-matmul/starter/main.cu",
       "title": "Grids And Matrix Multiply"
     },
@@ -150,9 +165,9 @@
       "title": "CUDA Smoke Test"
     }
   },
-  "completed_assignments": 1,
-  "run_count": 2,
+  "completed_assignments": 2,
+  "run_count": 12,
   "schema_version": 1,
   "total_assignments": 6,
-  "updated_at": "2026-06-04T17:37:51Z"
+  "updated_at": "2026-06-04T19:22:40Z"
 }

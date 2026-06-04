@@ -10,11 +10,12 @@
 __global__ void matmul_basic_kernel(const float* a, const float* b, float* c, int n) {
     int row = blockIdx.y * blockDim.y + threadIdx.y;
     int col = blockIdx.x * blockDim.x + threadIdx.x;
-
+    float ans = 0.0f;
     if(row<n && col<n){
         for(int i=0;i<n;i++){
-            c[row*n + col] += a[row*n + i]*b[i*n + col];
+            ans += a[row*n + i]*b[i*n + col];
         }
+        c[row*n + col] = ans;
     }
 
 }
@@ -23,12 +24,19 @@ __global__ void matmul_tiled_kernel(const float* a, const float* b, float* c, in
     __shared__ float a_tile[TILE][TILE];
     __shared__ float b_tile[TILE][TILE];
 
-    int row = blockIdx.y * blockDim.y + threadIdx.y;
-    int col = blockIdx.x * blockDim.x + threadIdx.x;
+    int row = blockIdx.y * TILE + threadIdx.y;
+    int col = blockIdx.x * TILE + threadIdx.x;
 
     if(row<n && col<n){
+        c[row*n + col] = 0;
         for(int ph=0;ph<(n/TILE);ph++){
-            
+            a_tile[threadIdx.y][threadIdx.x] = a[row*n + (ph*TILE + threadIdx.x)];
+            b_tile[threadIdx.y][threadIdx.x] = b[(ph*TILE + threadIdx.y)*n + col];
+            __syncthreads();
+            for(int i=0;i<TILE;i++){
+                c[row*n + col] += a_tile[threadIdx.y][i]*b_tile[i][threadIdx.x];
+            }
+            __syncthreads();
         }
     }
 }
