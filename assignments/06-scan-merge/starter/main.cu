@@ -58,6 +58,14 @@ int main(int argc, char** argv) {
     CUDA_CHECK(cudaMemcpy(d_input, h_input.data(), static_cast<size_t>(n) * sizeof(float),
                           cudaMemcpyHostToDevice));
 
+    block_exclusive_scan_kernel<<<grid_size, block_size,
+                                  static_cast<size_t>(block_size) * sizeof(float)>>>(
+        d_input, d_output, d_block_sums, n);
+    CUDA_CHECK(cudaGetLastError());
+    CUDA_CHECK(cudaDeviceSynchronize());
+    CUDA_CHECK(cudaMemset(d_output, 0, static_cast<size_t>(n) * sizeof(float)));
+    CUDA_CHECK(cudaMemset(d_block_sums, 0, static_cast<size_t>(grid_size) * sizeof(float)));
+
     GpuTimer timer;
     timer.tic();
     block_exclusive_scan_kernel<<<grid_size, block_size,
@@ -80,4 +88,3 @@ int main(int argc, char** argv) {
     CUDA_CHECK(cudaFree(d_block_sums));
     return ok ? 0 : 1;
 }
-
