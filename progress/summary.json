@@ -1,0 +1,86 @@
+{
+  "assignments": {
+    "01": {
+      "best_timings_ms": {},
+      "done": false,
+      "id": "01",
+      "kind": "assignment",
+      "latest": {},
+      "passed_runs": 0,
+      "runs": 0,
+      "source": "assignments/01-vector-add/starter/main.cu",
+      "title": "Vector Add"
+    },
+    "02": {
+      "best_timings_ms": {},
+      "done": false,
+      "id": "02",
+      "kind": "assignment",
+      "latest": {},
+      "passed_runs": 0,
+      "runs": 0,
+      "source": "assignments/02-grids-matmul/starter/main.cu",
+      "title": "Grids And Matrix Multiply"
+    },
+    "03": {
+      "best_timings_ms": {},
+      "done": false,
+      "id": "03",
+      "kind": "assignment",
+      "latest": {},
+      "passed_runs": 0,
+      "runs": 0,
+      "source": "assignments/03-memory-performance/starter/main.cu",
+      "title": "Memory Performance"
+    },
+    "04": {
+      "best_timings_ms": {},
+      "done": false,
+      "id": "04",
+      "kind": "assignment",
+      "latest": {},
+      "passed_runs": 0,
+      "runs": 0,
+      "source": "assignments/04-convolution-stencil/starter/main.cu",
+      "title": "Convolution And Stencil"
+    },
+    "05": {
+      "best_timings_ms": {},
+      "done": false,
+      "id": "05",
+      "kind": "assignment",
+      "latest": {},
+      "passed_runs": 0,
+      "runs": 0,
+      "source": "assignments/05-histogram-reduction/starter/main.cu",
+      "title": "Histogram And Reduction"
+    },
+    "06": {
+      "best_timings_ms": {},
+      "done": false,
+      "id": "06",
+      "kind": "assignment",
+      "latest": {},
+      "passed_runs": 0,
+      "runs": 0,
+      "source": "assignments/06-scan-merge/starter/main.cu",
+      "title": "Scan And Merge"
+    },
+    "smoke": {
+      "best_timings_ms": {},
+      "done": null,
+      "id": "smoke",
+      "kind": "check",
+      "latest": {},
+      "passed_runs": 0,
+      "runs": 0,
+      "source": "tools/cuda-smoke/main.cu",
+      "title": "CUDA Smoke Test"
+    }
+  },
+  "completed_assignments": 0,
+  "run_count": 0,
+  "schema_version": 1,
+  "total_assignments": 6,
+  "updated_at": "2026-06-04T16:33:31Z"
+}

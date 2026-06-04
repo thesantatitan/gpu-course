@@ -19,10 +19,13 @@ import subprocess
 import sys
 from pathlib import Path
 
+from common.progress import record_modal_run
+
 
 ROOT = Path(__file__).resolve().parent
 DEFAULT_GPU = "T4"
 DEFAULT_CUDA_IMAGE = "nvidia/cuda:12.4.0-devel-ubuntu22.04"
+PROGRESS_PREFIX = "PMPP_PROGRESS_JSON="
 
 LAB_ALIASES = {
     "smoke": "tools/cuda-smoke/main.cu",
@@ -68,6 +71,11 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=int(os.environ.get("PMPP_MODAL_TIMEOUT", "600")),
         help="Remote timeout in seconds. Default: 600.",
+    )
+    parser.add_argument(
+        "--no-progress",
+        action="store_true",
+        help="Run without appending to progress/runs.jsonl or regenerating summaries.",
     )
     parser.add_argument(
         "source",
@@ -142,6 +150,33 @@ def ensure_modal_command() -> list[str]:
     raise AssertionError("unreachable")
 
 
+def split_progress_payload(output: str) -> tuple[str, dict[str, object] | None]:
+    visible_lines: list[str] = []
+    payload: dict[str, object] | None = None
+
+    for line in output.splitlines(keepends=True):
+        if line.startswith(PROGRESS_PREFIX):
+            raw_payload = line[len(PROGRESS_PREFIX) :].strip()
+            try:
+                value = json.loads(raw_payload)
+            except json.JSONDecodeError:
+                visible_lines.append(line)
+                continue
+            if isinstance(value, dict):
+                payload = value
+            continue
+        visible_lines.append(line)
+
+    return "".join(visible_lines), payload
+
+
+def modal_run_url(output: str) -> str | None:
+    matches = re.findall(r"https://modal\.com/apps/\S+", output)
+    if not matches:
+        return None
+    return matches[-1].rstrip(".")
+
+
 def main() -> int:
     args = parse_args()
     source = resolve_source(args.source)
@@ -182,8 +217,10 @@ def main() -> int:
         stderr=subprocess.STDOUT,
         check=False,
     )
-    if completed.stdout:
-        print(completed.stdout, end="")
+    raw_output = completed.stdout or ""
+    visible_output, progress_payload = split_progress_payload(raw_output)
+    if visible_output:
+        print(visible_output, end="")
 
     if completed.returncode != 0:
         print(
@@ -193,9 +230,24 @@ def main() -> int:
         )
         return completed.returncode
 
-    match = re.search(r"^Assignment exit code: ([0-9]+)$", completed.stdout or "", re.MULTILINE)
-    if match:
-        return int(match.group(1))
+    assignment_exit_code: int | None = None
+    if progress_payload is not None:
+        progress_payload["modal_run_url"] = modal_run_url(raw_output)
+        assignment_exit_code = int(progress_payload.get("assignment_exit_code", 0))
+        if not args.no_progress:
+            record = record_modal_run(ROOT, progress_payload, visible_output)
+            status = "passed" if record["passed"] else "failed"
+            print(
+                f"Progress updated: progress/summary.md "
+                f"(run {record['run_id']}, {status})"
+            )
+
+    match = re.search(r"^Assignment exit code: ([0-9]+)$", visible_output, re.MULTILINE)
+    if assignment_exit_code is None and match:
+        assignment_exit_code = int(match.group(1))
+
+    if assignment_exit_code is not None:
+        return assignment_exit_code
 
     return 0
 

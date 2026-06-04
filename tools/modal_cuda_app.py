@@ -16,6 +16,7 @@ CUDA_IMAGE = os.environ.get(
     "PMPP_MODAL_CUDA_IMAGE", "nvidia/cuda:12.4.0-devel-ubuntu22.04"
 )
 TIMEOUT = int(os.environ.get("PMPP_MODAL_TIMEOUT", "600"))
+PROGRESS_PREFIX = "PMPP_PROGRESS_JSON="
 
 app = modal.App("pmpp-gpu-course")
 
@@ -53,6 +54,21 @@ def _safe_source_path(source: str) -> Path:
     if path.suffix != ".cu":
         raise ValueError(f"Source must be a .cu file: {source}")
     return path
+
+
+def _parse_assignment_metrics(stdout: str) -> dict[str, object]:
+    metrics: dict[str, object] = {}
+    for line in stdout.splitlines():
+        stripped = line.strip()
+        if not stripped.startswith("{") or not stripped.endswith("}"):
+            continue
+        try:
+            value = json.loads(stripped)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(value, dict) and ("ok" in value or "lab" in value):
+            metrics = value
+    return metrics
 
 
 @app.function(image=image, gpu=GPU, timeout=TIMEOUT)
@@ -94,6 +110,10 @@ def compile_and_run(source: str, program_args: list[str]) -> dict[str, object]:
         "gpu_request": GPU,
         "gpu_info": gpu_info.stdout.strip(),
         "gpu_info_stderr": gpu_info.stderr.strip(),
+        "metrics": _parse_assignment_metrics(result.stdout),
+        "source": source,
+        "program_args": program_args,
+        "cuda_image": CUDA_IMAGE,
     }
 
 
@@ -121,4 +141,15 @@ def main(source: str = "assignments/01-vector-add/starter/main.cu", program_args
     if result["stderr"]:
         print(result["stderr"], end="", file=sys.stderr)
 
+    progress_payload = {
+        "assignment_exit_code": result["returncode"],
+        "allocated_gpu": result["gpu_info"],
+        "cuda_image": result["cuda_image"],
+        "metrics": result["metrics"],
+        "program_args": result["program_args"],
+        "remote_command": result["command"],
+        "requested_gpu": result["gpu_request"],
+        "source": result["source"],
+    }
+    print(PROGRESS_PREFIX + json.dumps(progress_payload, sort_keys=True, separators=(",", ":")))
     print(f"Assignment exit code: {result['returncode']}")

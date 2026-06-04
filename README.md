@@ -57,3 +57,5 @@ At first, most starters intentionally fail because the kernels contain TODOs. Yo
 5. Write down what changed and why.
 
 On Colab, copy the same folder structure into the runtime or mount this repo from Drive. On Modal, use `uv run run_modal.py ...`; it ships the repo into a CUDA container, compiles the selected CUDA file, and prints the results.
+
+Modal runs also update [progress/summary.md](progress/summary.md) and append raw history to `progress/runs.jsonl`, so you can track which assignments are done and compare benchmark timings over time.

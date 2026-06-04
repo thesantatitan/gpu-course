@@ -78,12 +78,19 @@ The wrapper:
 - uses `nvidia/cuda:12.4.0-devel-ubuntu22.04` so `nvcc` is available,
 - copies the current repo into the Modal container,
 - compiles with [common/compile_and_run.py](common/compile_and_run.py),
-- prints the allocated GPU, compile command, and program output.
+- prints the allocated GPU, compile command, and program output,
+- updates `progress/runs.jsonl`, `progress/summary.json`, and `progress/summary.md`.
 
 Override the GPU when needed:
 
 ```bash
 uv run run_modal.py --gpu L4 04 -- 1024 1024 2
+```
+
+Skip progress tracking for a throwaway run:
+
+```bash
+uv run run_modal.py --no-progress 01
 ```
 
 ## Local Mac Note
