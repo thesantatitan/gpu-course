@@ -28,7 +28,21 @@ The target experience is like a good computer graphics course assignment: the ha
 
 ## How To Use A Lab
 
-From the repo root, compile and run a starter:
+From the repo root, run CUDA on Modal with one command:
+
+```bash
+uv run run_modal.py
+```
+
+That default command runs a tiny CUDA smoke test. To run a course lab, pass a lab alias:
+
+```bash
+uv run run_modal.py 01 -- 1048576 256
+```
+
+The default GPU is Modal `T4`, because it is currently the cheapest Modal GPU that can compile and run these CUDA labs. The Modal image is an NVIDIA CUDA `devel` image so `nvcc` is available in the container.
+
+For local CUDA machines or Colab, compile and run directly:
 
 ```bash
 python3 common/compile_and_run.py assignments/01-vector-add/starter/main.cu -- 1048576 256
@@ -42,4 +56,4 @@ At first, most starters intentionally fail because the kernels contain TODOs. Yo
 4. Benchmark a few sizes/block shapes.
 5. Write down what changed and why.
 
-On Colab, copy the same folder structure into the runtime or mount this repo from Drive. On Modal, run the same command inside a CUDA-enabled image.
+On Colab, copy the same folder structure into the runtime or mount this repo from Drive. On Modal, use `uv run run_modal.py ...`; it ships the repo into a CUDA container, compiles the selected CUDA file, and prints the results.

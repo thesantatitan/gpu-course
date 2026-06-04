@@ -59,15 +59,14 @@ def main() -> int:
     if program_args and program_args[0] == "--":
         program_args = program_args[1:]
 
-    print("$ " + " ".join(compile_cmd))
+    print("$ " + " ".join(compile_cmd), flush=True)
     subprocess.run(compile_cmd, check=True, cwd=ROOT)
 
     run_cmd = [str(binary), *program_args]
-    print("$ " + " ".join(run_cmd))
+    print("$ " + " ".join(run_cmd), flush=True)
     subprocess.run(run_cmd, check=True, cwd=ROOT)
     return 0
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

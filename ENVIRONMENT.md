@@ -1,21 +1,38 @@
 # Environment
 
-The assignments are plain CUDA C++ plus a small Python compile wrapper. That keeps the course portable across Colab, Modal, cloud VMs, and any Linux machine with NVIDIA CUDA.
+The assignments are plain CUDA C++ plus small Python wrappers. Local Python tooling is managed with `uv`; CUDA execution can happen on Modal, Colab, cloud VMs, or any Linux machine with NVIDIA CUDA.
 
 ## Minimum Requirements
 
-- NVIDIA GPU.
-- CUDA toolkit with `nvcc`.
-- Python 3.9+.
-- A shell where you can run `python3 common/compile_and_run.py ...`.
+- `uv` for local Python tooling.
+- Python 3.11+ when running the Modal wrapper through `uv`.
+- A Modal account for remote GPU runs.
+- For local CUDA or cloud VM runs: an NVIDIA GPU and CUDA toolkit with `nvcc`.
 
 Check the runtime:
 
 ```bash
-nvidia-smi
-nvcc --version
+uv --version
 python3 --version
 ```
+
+For local CUDA machines, also check `nvidia-smi` and `nvcc --version`.
+
+## uv Workflow
+
+Install/sync Python dependencies:
+
+```bash
+uv sync
+```
+
+Run the Modal wrapper:
+
+```bash
+uv run run_modal.py
+```
+
+If you accidentally run `python3 run_modal.py ...`, the script will re-exec itself through `uv run` when `uv` is available.
 
 ## Colab Workflow
 
@@ -40,11 +57,34 @@ Colab tips:
 
 ## Modal Workflow
 
-Use a CUDA-enabled image and run the same commands inside it. The course does not depend on a special Python package beyond the standard library. A good Modal setup should provide:
+Authenticate once:
 
-- CUDA toolkit, not only CUDA runtime.
-- `nvcc` on `PATH`.
-- this repo mounted or copied into the container.
+```bash
+uv run modal setup
+```
+
+Then run any starter by lab alias:
+
+```bash
+uv run run_modal.py
+uv run run_modal.py 01 -- 1048576 256
+uv run run_modal.py matmul -- 256
+uv run run_modal.py transpose -- 2048 2048
+```
+
+The wrapper:
+
+- defaults to Modal `T4`, the cheapest listed Modal GPU at the time this was written,
+- uses `nvidia/cuda:12.4.0-devel-ubuntu22.04` so `nvcc` is available,
+- copies the current repo into the Modal container,
+- compiles with [common/compile_and_run.py](common/compile_and_run.py),
+- prints the allocated GPU, compile command, and program output.
+
+Override the GPU when needed:
+
+```bash
+uv run run_modal.py --gpu L4 04 -- 1024 1024 2
+```
 
 ## Local Mac Note
 
@@ -57,4 +97,3 @@ Apple Silicon and most Macs cannot run CUDA kernels locally. Use the Mac for edi
 - Time kernels with CUDA events, not wall-clock Python timing.
 - Include transfer time only when the assignment asks for end-to-end timing.
 - Change one optimization at a time.
-

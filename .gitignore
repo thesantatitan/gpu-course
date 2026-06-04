@@ -1,7 +1,7 @@
 .build/
+.venv/
 *.o
 *.out
 *.log
 __pycache__/
 .ipynb_checkpoints/
-
