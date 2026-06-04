@@ -55,9 +55,42 @@
       "done": false,
       "id": "02",
       "kind": "assignment",
-      "latest": {},
+      "latest": {
+        "allocated_gpu": {
+          "driver_version": "580.95.05",
+          "memory_total": "15360 MiB",
+          "memory_total_mib": 15360,
+          "name": "Tesla T4",
+          "raw": "Tesla T4, 580.95.05, 15360 MiB"
+        },
+        "assignment_exit_code": 1,
+        "git": {
+          "branch": "user/thesantatitan/answers",
+          "commit": "1efc14d",
+          "dirty": true
+        },
+        "metrics": {
+          "basic_err": 5.7220459e-06,
+          "basic_ms": 31.438463,
+          "lab": "matmul",
+          "n": 128,
+          "ok": false,
+          "tiled_err": 21.891191,
+          "tiled_ms": 0.021536
+        },
+        "modal_run_url": "https://modal.com/apps/thesantatitan/main/ap-tvluskBR6ERSL4KOe4p4Wr",
+        "passed": false,
+        "program_args": [],
+        "recorded_at": "2026-06-04T17:37:51Z",
+        "requested_gpu": "T4",
+        "run_id": "918092ae3ee1",
+        "timings_ms": {
+          "basic_ms": 31.438463,
+          "tiled_ms": 0.021536
+        }
+      },
       "passed_runs": 0,
-      "runs": 0,
+      "runs": 1,
       "source": "assignments/02-grids-matmul/starter/main.cu",
       "title": "Grids And Matrix Multiply"
     },
@@ -118,8 +151,8 @@
     }
   },
   "completed_assignments": 1,
-  "run_count": 1,
+  "run_count": 2,
   "schema_version": 1,
   "total_assignments": 6,
-  "updated_at": "2026-06-04T16:57:03Z"
+  "updated_at": "2026-06-04T17:37:51Z"
 }

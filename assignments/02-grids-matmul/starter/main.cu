@@ -11,32 +11,26 @@ __global__ void matmul_basic_kernel(const float* a, const float* b, float* c, in
     int row = blockIdx.y * blockDim.y + threadIdx.y;
     int col = blockIdx.x * blockDim.x + threadIdx.x;
 
-    // TODO: If row/col are in bounds, compute C[row, col].
-    (void)a;
-    (void)b;
-    (void)c;
-    (void)n;
-    (void)row;
-    (void)col;
+    if(row<n && col<n){
+        for(int i=0;i<n;i++){
+            c[row*n + col] += a[row*n + i]*b[i*n + col];
+        }
+    }
+
 }
 
 __global__ void matmul_tiled_kernel(const float* a, const float* b, float* c, int n) {
     __shared__ float a_tile[TILE][TILE];
     __shared__ float b_tile[TILE][TILE];
 
-    int row = blockIdx.y * TILE + threadIdx.y;
-    int col = blockIdx.x * TILE + threadIdx.x;
+    int row = blockIdx.y * blockDim.y + threadIdx.y;
+    int col = blockIdx.x * blockDim.x + threadIdx.x;
 
-    // TODO: Load one A tile and one B tile per phase, synchronize,
-    // accumulate the dot product, then write C[row, col] if in bounds.
-    (void)a;
-    (void)b;
-    (void)c;
-    (void)n;
-    (void)row;
-    (void)col;
-    (void)a_tile;
-    (void)b_tile;
+    if(row<n && col<n){
+        for(int ph=0;ph<(n/TILE);ph++){
+            
+        }
+    }
 }
 
 static void cpu_matmul(const std::vector<float>& a,
