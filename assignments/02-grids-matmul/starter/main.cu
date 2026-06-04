@@ -29,15 +29,19 @@ __global__ void matmul_tiled_kernel(const float* a, const float* b, float* c, in
 
     if(row<n && col<n){
         c[row*n + col] = 0;
+        float ans = 0.0f;
         for(int ph=0;ph<(n/TILE);ph++){
             a_tile[threadIdx.y][threadIdx.x] = a[row*n + (ph*TILE + threadIdx.x)];
             b_tile[threadIdx.y][threadIdx.x] = b[(ph*TILE + threadIdx.y)*n + col];
             __syncthreads();
+            
             for(int i=0;i<TILE;i++){
-                c[row*n + col] += a_tile[threadIdx.y][i]*b_tile[i][threadIdx.x];
+                ans += a_tile[threadIdx.y][i]*b_tile[i][threadIdx.x];
             }
+            
             __syncthreads();
         }
+        c[row*n + col] = ans;
     }
 }
 

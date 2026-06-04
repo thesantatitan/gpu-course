@@ -55,16 +55,16 @@
         "basic_ms": {
           "gpu": "Tesla T4",
           "program_args": [],
-          "recorded_at": "2026-06-04T19:22:40Z",
-          "run_id": "1867656e5f83",
-          "value": 30.922752
+          "recorded_at": "2026-06-04T19:56:18Z",
+          "run_id": "eb2fa71ac752",
+          "value": 0.022496
         },
         "tiled_ms": {
           "gpu": "Tesla T4",
           "program_args": [],
-          "recorded_at": "2026-06-04T19:22:40Z",
-          "run_id": "1867656e5f83",
-          "value": 0.034336
+          "recorded_at": "2026-06-04T19:56:18Z",
+          "run_id": "eb2fa71ac752",
+          "value": 0.016224
         }
       },
       "done": true,
@@ -78,34 +78,40 @@
           "name": "Tesla T4",
           "raw": "Tesla T4, 580.95.05, 15360 MiB"
         },
-        "assignment_exit_code": 0,
+        "assignment_exit_code": 1,
         "git": {
           "branch": "user/thesantatitan/answers",
-          "commit": "e6638a8",
+          "commit": "c730ab9",
           "dirty": true
         },
         "metrics": {
-          "basic_err": 5.7220459e-06,
-          "basic_ms": 30.922752,
+          "basic_err": 0.0036621094,
+          "basic_gflops": 249.438,
+          "basic_ms": 35263.582031,
+          "check_mode": "sampled",
+          "check_samples": 128,
           "lab": "matmul",
-          "n": 128,
-          "ok": true,
-          "tiled_err": 5.7220459e-06,
-          "tiled_ms": 0.034336
+          "n": 16384,
+          "ok": false,
+          "tiled_err": 0.0036621094,
+          "tiled_gflops": 662.279,
+          "tiled_ms": 13281.556641
         },
-        "modal_run_url": "https://modal.com/apps/thesantatitan/main/ap-WwDmWRzfyRAKbwxSKbWHqe",
-        "passed": true,
-        "program_args": [],
-        "recorded_at": "2026-06-04T19:22:40Z",
+        "modal_run_url": "https://modal.com/apps/thesantatitan/main/ap-IqE3FQjhsmJZ9e3eDw3ZWt",
+        "passed": false,
+        "program_args": [
+          "16384"
+        ],
+        "recorded_at": "2026-06-04T20:04:07Z",
         "requested_gpu": "T4",
-        "run_id": "1867656e5f83",
+        "run_id": "c6fe74e94b3b",
         "timings_ms": {
-          "basic_ms": 30.922752,
-          "tiled_ms": 0.034336
+          "basic_ms": 35263.582031,
+          "tiled_ms": 13281.556641
         }
       },
-      "passed_runs": 2,
-      "runs": 11,
+      "passed_runs": 5,
+      "runs": 15,
       "source": "assignments/02-grids-matmul/starter/main.cu",
       "title": "Grids And Matrix Multiply"
     },
@@ -166,8 +172,8 @@
     }
   },
   "completed_assignments": 2,
-  "run_count": 12,
+  "run_count": 16,
   "schema_version": 1,
   "total_assignments": 6,
-  "updated_at": "2026-06-04T19:22:40Z"
+  "updated_at": "2026-06-04T20:04:07Z"
 }
